@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-""" Lock boxes searches for key
- """
+""" Lock boxes searches for key """
 
 
 def canUnlockAll(boxes):
@@ -12,15 +11,10 @@ def canUnlockAll(boxes):
     Returns:
         _type_: _description_
     """
-    unlocked_boxes = [False] * len(boxes)
-    unlocked_boxes[0] = True
-    keys_queue = [0]
-
-    while keys_queue:
-        current_box = keys_queue.pop()
-        for key in boxes[current_box]:
-            if not unlocked_boxes[key]:
-                unlocked_boxes[key] = True
-                keys_queue.append(key)
-
-    return all(unlocked_boxes)
+    num_boxes = len(boxes)
+    keys = [0]
+    for key in keys:
+        for new_key in boxes[key]:
+            if new_key not in keys and new_key < num_boxes:
+                keys.append(new_key)
+    return len(keys) == num_boxes
