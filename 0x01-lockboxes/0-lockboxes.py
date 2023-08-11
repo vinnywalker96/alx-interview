@@ -1,5 +1,5 @@
-#!/usr/bin/env python3
-""" Lock boxes searches for key """
+#!/usr/bin/python3
+"""Lock boxes searches for key"""
 
 
 def canUnlockAll(boxes):
