@@ -14,6 +14,4 @@ def validUTF8(data: Union[int, str]) -> bool:
     for val in data:
         if not (min_val <= val <= max_val):
             return False
-        else:
-            chr(val)
-            return True
+    return True
