@@ -1,0 +1,20 @@
+#!/usr/bin/env python3
+"""Minimal Operation"""
+
+
+def minOperations(n: int) -> int:
+    """Calculate possible operations
+
+    Args:
+        n (int)
+    """
+    clipboard: str = ""
+    current_string: str = "H"
+    count: int = 0
+    while len(current_string) < n:
+        if (n - len(current_string)) % len(current_string) == 0:
+            clipboard = current_string
+            count += 1
+        current_string += clipboard
+        count += 1
+    return count
