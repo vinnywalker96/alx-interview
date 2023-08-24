@@ -8,9 +8,9 @@ def minOperations(n: int) -> int:
     Args:
         n (int)
     """
-    clipboard: str = ""
-    current_string: str = "H"
-    count: int = 0
+    clipboard = ""
+    current_string = "H"
+    count = 0
     while len(current_string) < n:
         if (n - len(current_string)) % len(current_string) == 0:
             clipboard = current_string
