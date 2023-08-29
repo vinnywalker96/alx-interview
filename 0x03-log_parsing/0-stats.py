@@ -2,35 +2,31 @@
 """Log parsing"""
 
 import sys
+import collections
 
-total_size = 0
-counts = {}
-try:
-    line_count = 0
+
+def log_stats():
+    total_size = 0
+    status_counts = collections.defaultdict(int)
+
     for line in sys.stdin:
-        line = line.strip()
         parts = line.split()
-        if len(parts) != 10:
-            continue
-        ip = parts[0]
-        code = parts[8]
-        file_size = int(parts[9])
+        if len(parts) >= 10 and parts[8].isnumeric():
+            id = parts[0]
+            date = parts[2][1:-1]
+            request = " ".join(parts[5:8])
+            status_code = int(parts[8])
+            file_size = int(parts[9])
 
-        total_size += file_size
+            if status_code.isdigit():
+                total_size += int(file_size)
+                status_counts[int(status_code)] += 1
+        
+            if len(status_counts) % 10 == 0:
+                print(f"File Size: {total_size}")
+                for status_code, count in sorted(status_counts.items()):
+                    print(f'{status_code}: {count}')
 
-        if code.isdigit():
-            code = int(code)
-            if code in counts:
-                counts[code] += 1
-            else:
-                counts[code] = 1
-        line_count += 1
 
-        if line_count % 10 == 0:
-            print(f'File size: {total_size}')
-            for status in sorted(counts.keys()):
-                print(f'{status}: {counts[status]}')
-except KeyboardInterrupt:
-    print(f"Total file size: {total_size}")
-    for status in sorted(counts.keys()):
-        print(f"{status}: {counts[status]}")
+if __name__ == "__main__":
+    log_stats()
