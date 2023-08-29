@@ -9,23 +9,25 @@ total_size = 0
 status_counts = collections.defaultdict(int)
 line_count = 0
 
+
 def print_statistics():
     print(f"File size: {total_size}")
     for status in sorted(status_counts):
         print(f"{status}: {status_counts[status]}")
 
+
 def handle_interrupt(signum, frame):
     print_statistics()
     sys.exit(0)
 
-# Register the signal handler for CTRL+C
+
 signal.signal(signal.SIGINT, handle_interrupt)
 
 try:
     for line in sys.stdin:
         parts = line.split()
 
-        if len(parts) >= 7: 
+        if len(parts) >= 7:
             status_code = parts[-2]
             if status_code.isnumeric():
                 status_code = int(status_code)
@@ -43,4 +45,3 @@ except KeyboardInterrupt:
 
 
 print_statistics()
-
