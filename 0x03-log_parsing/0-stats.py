@@ -10,7 +10,7 @@ status_counts = collections.defaultdict(int)
 line_count = 0
 
 def print_statistics():
-    print(f"Fil file size: {total_size}")
+    print(f"File size: {total_size}")
     for status in sorted(status_counts):
         print(f"{status}: {status_counts[status]}")
 
