@@ -3,39 +3,34 @@
 
 import sys
 
-
-def get_stats():
-    status_codes = {
-            "201": 0,
-            "401": 0,
-            "402": 0,
-            "404": 0,
-            "405": 0,
-            "500": 0
-        }
-    file_size = 0
-    count = 0
+total_size = 0
+counts = {}
+try:
+    line_count = 0
     for line in sys.stdin:
-        count += 1
-        if line[74:77] == '201':
-            status_codes['201'] += 1
-        elif line[74:77] == '401':
-            status_codes['401'] += 1
-        elif line[74:77] == '402':
-            status_codes['402'] += 1
-        elif line[74:77] == '404':
-            status_codes['404'] += 1
-        elif line[74:77] == '405':
-            status_codes['405'] += 1
-        else:
-            status_codes['500'] += 1
-        
-        for key, value in status_codes.items():
-            if value > 0:
-                print(f'{key}: {value}')
-        if count == 10:
-            print(f'File size: {line[-3:]}')
-            count = 0
+        line = line.strip()
+        parts = line.split()
+        if len(parts) != 10:
+            continue
+        ip = parts[0]
+        code = parts[8]
+        file_size = int(parts[9])
 
-if __name__ == "__main__":
-    get_stats()
+        total_size += file_size
+
+        if code.isdigit():
+            code = int(code)
+            if code in counts:
+                counts[code] += 1
+            else:
+                counts[code] = 1
+        line_count += 1
+
+        if line_count % 10 == 0:
+            print(f'File size: {total_size}')
+            for status in sorted(counts.keys()):
+                print(f'{status}: {counts[status]}')
+except KeyboardInterrupt:
+    print(f"Total file size: {total_size}")
+    for status in sorted(counts.keys()):
+        print(f"{status}: {counts[status]}")
