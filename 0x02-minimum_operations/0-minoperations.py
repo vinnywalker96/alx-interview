@@ -4,7 +4,7 @@
 
 def minOperations(n):
     '''calculates the fewest number of
-    operations needed 
+    operations needed
     '''
     pasted_chars = 1  # how many chars in the file
     clipboard = 0  # how many H's copied
@@ -26,7 +26,7 @@ def minOperations(n):
             counter += 1
             continue
 
-        remaining = n - pasted_chars  
+        remaining = n - pasted_chars
         if remaining < clipboard:
             return 0
 
