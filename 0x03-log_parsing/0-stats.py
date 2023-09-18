@@ -1,47 +1,37 @@
 #!/usr/bin/python3
-"""Log Parse"""
+'''a script that reads stdin line by line and computes metrics'''
+
+
 import sys
-import collections
-import signal
 
-
+cache = {'200': 0, '301': 0, '400': 0, '401': 0,
+         '403': 0, '404': 0, '405': 0, '500': 0}
 total_size = 0
-status_counts = collections.defaultdict(int)
-line_count = 0
-
-
-def print_statistics():
-    print(f"File size: {total_size}")
-    for status in sorted(status_counts):
-        print(f"{status}: {status_counts[status]}")
-
-
-def handle_interrupt(signum, frame):
-    print_statistics()
-    sys.exit(0)
-
-
-signal.signal(signal.SIGINT, handle_interrupt)
+counter = 0
 
 try:
     for line in sys.stdin:
-        parts = line.split()
+        line_list = line.split(" ")
+        if len(line_list) > 4:
+            code = line_list[-2]
+            size = int(line_list[-1])
+            if code in cache.keys():
+                cache[code] += 1
+            total_size += size
+            counter += 1
 
-        if len(parts) >= 7:
-            status_code = parts[-2]
-            if status_code.isnumeric():
-                status_code = int(status_code)
-                if status_code in [200, 301, 400, 401, 403, 404, 405, 500]:
-                    file_size = int(parts[-1])
-                    total_size += file_size
-                    status_counts[status_code] += 1
-                    line_count += 1
+        if counter == 10:
+            counter = 0
+            print('File size: {}'.format(total_size))
+            for key, value in sorted(cache.items()):
+                if value != 0:
+                    print('{}: {}'.format(key, value))
 
-        if line_count % 10 == 0:
-            print_statistics()
-
-except KeyboardInterrupt:
+except Exception as err:
     pass
 
-
-print_statistics()
+finally:
+    print('File size: {}'.format(total_size))
+    for key, value in sorted(cache.items()):
+        if value != 0:
+            print('{}: {}'.format(key, value))
