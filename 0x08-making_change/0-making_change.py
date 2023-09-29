@@ -4,10 +4,8 @@
 
 def makeChange(coins, total):
     """Calculate Change"""
-    if total == 0:
+    if total <= 0:
         return 0
-    if total < 0:
-        return -1
     res = [float('inf')] * (total + 1)
     res[0] = 0
     for coin in coins:
